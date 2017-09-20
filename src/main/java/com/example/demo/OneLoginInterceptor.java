@@ -42,13 +42,18 @@ public class OneLoginInterceptor implements HandlerInterceptor {
             return;
         }
 
+        if (!modelAndView.getViewName().startsWith("redirect:")) {
+            // post method must be redirect
+            return;
+        }
+
         try {
             Auth auth = new Auth(httpServletRequest, httpServletResponse);
             // セッションにOneLogin認証情報を持っているかチェックする
             OneLoginAttributeBean attributeBean = (OneLoginAttributeBean) httpServletRequest.getSession().getAttribute(SESSION_KEY_ONELOGIN_AUTH);
             if (attributeBean == null || attributeBean.getLastAuthenticatedAt().isBefore(LocalDateTime.now().minusMinutes(15))) {
                 // セッション無し、または認証時より15分以上経過している場合は再認証を行う
-                auth.login((String) modelAndView.getModel().get("redirectPath"));
+                auth.login(modelAndView.getViewName().substring(9));
                 return;
             } else {
                 // 認証を持っている

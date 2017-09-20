@@ -4,6 +4,7 @@ import com.onelogin.saml2.Auth;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -20,18 +21,17 @@ public class MainController {
         return "index";
     }
 
-    @RequestMapping("/security/01")
+    @RequestMapping(value = "/security/01", method = RequestMethod.GET)
     String security01() {
         System.out.println("/security/01");
         return "security";
     }
 
-    @RequestMapping("/security/02")
+    @RequestMapping(value = "/security/02", method = RequestMethod.POST)
     String security02(@RequestParam(value = "testValue", required = false) String testValue, HttpServletRequest request, HttpServletResponse response, Model model) {
         System.out.println("/security/02");
-        model.addAttribute("redirectPath", "http://yahoo.co.jp");
 
-        return "security2";
+        return "redirect:http://yahoo.co.jp";
     }
 
     @RequestMapping("/acs")
@@ -48,7 +48,7 @@ public class MainController {
 
             return "redirect:" + request.getParameter("RelayState");
         } else {
-            // OneLoginからリダイレクトされる時はisAuthenticated() => true なのでここにくる場合は不正リクエストとして良い
+            // OneLoginからリダイレクトされる時はisAuthenticated() => true なのでここにくる場合は不正
             return "redirect:/";
         }
     }
