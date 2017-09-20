@@ -6,8 +6,14 @@
 <p>ここが管理画面のトップページだと想定する</p>
 <ul>
     <li>
-        <a href="security">OneLoginによって個人情報を保護するページ</a>
+        <a href="security/01">GETで受ける認証ページ</a>
     </li>
 </ul>
+
+<form action="/security/02" method="post">
+    <input type="text" name="testValue"/>
+    <input type="submit" value="POSTで受けるセキュアページ"/>
+</form>
+
 </body>
 </html>
